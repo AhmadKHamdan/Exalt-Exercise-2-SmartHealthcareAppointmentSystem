@@ -1,0 +1,11 @@
+package com.exalt.smarthealthcareappointmentsystem.dto.request;
+
+import java.time.LocalTime;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record CreateDoctorRequest(@NotBlank String email, @NotBlank String fullName, @NotBlank String password,
+        @NotBlank String specialty, @NotNull LocalTime availabilityFrom, @NotNull LocalTime availabilityTill) {
+
+}

@@ -32,7 +32,7 @@ public abstract class User {
     private String email;
 
     @Column(nullable = false)
-    private String username;
+    private String fullName;
 
     @Column(nullable = false)
     private String password;
