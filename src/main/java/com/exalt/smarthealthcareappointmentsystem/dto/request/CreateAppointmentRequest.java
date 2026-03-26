@@ -1,0 +1,10 @@
+package com.exalt.smarthealthcareappointmentsystem.dto.request;
+
+import java.time.LocalDateTime;
+
+import jakarta.validation.constraints.NotNull;
+
+public record CreateAppointmentRequest(@NotNull Long patientId, @NotNull Long doctorId,
+                @NotNull LocalDateTime appointmentTime) {
+
+}

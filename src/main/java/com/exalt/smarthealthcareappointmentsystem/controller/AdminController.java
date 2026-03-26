@@ -17,6 +17,7 @@ import com.exalt.smarthealthcareappointmentsystem.dto.request.CreateDoctorReques
 import com.exalt.smarthealthcareappointmentsystem.dto.request.CreatePatientRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.UpdateDoctorRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.UpdatePatientRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.AppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.PatientResponse;
 import com.exalt.smarthealthcareappointmentsystem.service.AdminService;
@@ -80,5 +81,11 @@ public class AdminController {
             @PathVariable Long id) {
         PatientResponse response = adminService.updatePatientById(request, id);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get all appointments")
+    @GetMapping("/appointments")
+    public ResponseEntity<List<AppointmentResponse>> getAppointments() {
+        return ResponseEntity.ok(adminService.getAllAppointments());
     }
 }

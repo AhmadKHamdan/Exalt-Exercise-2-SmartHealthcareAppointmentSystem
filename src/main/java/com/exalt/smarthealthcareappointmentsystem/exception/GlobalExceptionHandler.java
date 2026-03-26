@@ -32,6 +32,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(AppointmentConflictException.class)
+    public ResponseEntity<ErrorObject> handleAppointmentConflictException(AppointmentConflictException ex,
+            WebRequest request) {
+        ErrorObject errorObject = new ErrorObject();
+        errorObject.setStatusCode(HttpStatus.CONFLICT.value());
+        errorObject.setMessage(ex.getMessage());
+        errorObject.setTimestamp(LocalDateTime.now());
+
+        return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorObject> handleValidationException(MethodArgumentNotValidException ex) {
         String message = ex.getBindingResult()

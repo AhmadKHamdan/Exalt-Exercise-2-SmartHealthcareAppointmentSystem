@@ -10,14 +10,17 @@ import com.exalt.smarthealthcareappointmentsystem.dto.request.CreateDoctorReques
 import com.exalt.smarthealthcareappointmentsystem.dto.request.CreatePatientRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.UpdateDoctorRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.UpdatePatientRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.AppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.PatientResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Patient;
 import com.exalt.smarthealthcareappointmentsystem.exception.DuplicateEmailException;
 import com.exalt.smarthealthcareappointmentsystem.exception.UserNotFoundException;
+import com.exalt.smarthealthcareappointmentsystem.mapper.AppointmentMapper;
 import com.exalt.smarthealthcareappointmentsystem.mapper.DoctorMapper;
 import com.exalt.smarthealthcareappointmentsystem.mapper.PatientMapper;
+import com.exalt.smarthealthcareappointmentsystem.repository.AppointmentRepository;
 import com.exalt.smarthealthcareappointmentsystem.repository.DoctorRepository;
 import com.exalt.smarthealthcareappointmentsystem.repository.PatientRepository;
 import com.exalt.smarthealthcareappointmentsystem.repository.UserRepository;
@@ -32,8 +35,10 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
+    private final AppointmentRepository appointmentRepository;
     private final DoctorMapper doctorMapper;
     private final PatientMapper patientMapper;
+    private final AppointmentMapper appointmentMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -115,5 +120,10 @@ public class AdminServiceImpl implements AdminService {
 
         Patient updatedPatient = patientRepository.save(patient);
         return patientMapper.toPatientResponse(updatedPatient);
+    }
+
+    @Override
+    public List<AppointmentResponse> getAllAppointments() {
+        return appointmentRepository.findAll().stream().map(appointmentMapper::toAppointmentResponse).toList();
     }
 }

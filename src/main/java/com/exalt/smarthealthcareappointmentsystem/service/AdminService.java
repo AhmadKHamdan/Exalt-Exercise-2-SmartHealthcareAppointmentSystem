@@ -6,6 +6,7 @@ import com.exalt.smarthealthcareappointmentsystem.dto.request.CreateDoctorReques
 import com.exalt.smarthealthcareappointmentsystem.dto.request.CreatePatientRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.UpdateDoctorRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.UpdatePatientRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.AppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.PatientResponse;
 
@@ -24,4 +25,6 @@ public interface AdminService {
     void deletePatientById(Long id);
 
     PatientResponse updatePatientById(UpdatePatientRequest request, Long id);
+
+    List<AppointmentResponse> getAllAppointments();
 }
