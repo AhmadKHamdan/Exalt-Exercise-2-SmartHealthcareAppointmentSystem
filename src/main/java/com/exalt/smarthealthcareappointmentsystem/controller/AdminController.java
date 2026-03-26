@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.request.CreateDoctorRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.request.CreatePatientRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.PatientResponse;
 import com.exalt.smarthealthcareappointmentsystem.service.AdminService;
 
 import jakarta.validation.Valid;
@@ -40,5 +42,10 @@ public class AdminController {
     public ResponseEntity<Void> deletePokemon(@PathVariable("id") Long doctorId) {
         adminService.deleteDoctorById(doctorId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/patients")
+    public ResponseEntity<PatientResponse> createPatient(@Valid @RequestBody CreatePatientRequest request) {
+        return new ResponseEntity<>(adminService.createPatient(request), HttpStatus.CREATED);
     }
 }

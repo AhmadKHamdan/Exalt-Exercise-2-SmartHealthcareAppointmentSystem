@@ -3,7 +3,9 @@ package com.exalt.smarthealthcareappointmentsystem.service;
 import java.util.List;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.request.CreateDoctorRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.request.CreatePatientRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.PatientResponse;
 
 public interface AdminService {
 
@@ -12,4 +14,6 @@ public interface AdminService {
     List<DoctorResponse> getAllDoctors();
 
     void deleteDoctorById(Long id);
+
+    PatientResponse createPatient(CreatePatientRequest request);
 }
