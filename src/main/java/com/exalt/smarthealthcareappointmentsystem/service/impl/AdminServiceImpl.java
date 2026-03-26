@@ -1,5 +1,7 @@
 package com.exalt.smarthealthcareappointmentsystem.service.impl;
 
+import java.util.List;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
 import com.exalt.smarthealthcareappointmentsystem.exception.DuplicateEmailException;
 import com.exalt.smarthealthcareappointmentsystem.mapper.DoctorMapper;
 import com.exalt.smarthealthcareappointmentsystem.repository.DoctorRepository;
+import com.exalt.smarthealthcareappointmentsystem.repository.UserRepository;
 import com.exalt.smarthealthcareappointmentsystem.service.AdminService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
+    private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
     private final DoctorMapper doctorMapper;
     private final PasswordEncoder passwordEncoder;
@@ -37,5 +41,9 @@ public class AdminServiceImpl implements AdminService {
         Doctor savedDoctor = doctorRepository.save(doctor);
         return doctorMapper.toDoctorResponse(savedDoctor);
     }
+
+    @Override
+    public List<DoctorResponse> getAllDoctors() {
+        return doctorRepository.findAll().stream().map(doc -> doctorMapper.toDoctorResponse(doc)).toList();
     }
 }
