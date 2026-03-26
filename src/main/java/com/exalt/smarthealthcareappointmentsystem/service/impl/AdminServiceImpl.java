@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.CreateDoctorRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
+import com.exalt.smarthealthcareappointmentsystem.exception.DoctorNotFoundException;
 import com.exalt.smarthealthcareappointmentsystem.exception.DuplicateEmailException;
 import com.exalt.smarthealthcareappointmentsystem.mapper.DoctorMapper;
 import com.exalt.smarthealthcareappointmentsystem.repository.DoctorRepository;
@@ -45,5 +46,13 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<DoctorResponse> getAllDoctors() {
         return doctorRepository.findAll().stream().map(doc -> doctorMapper.toDoctorResponse(doc)).toList();
+    }
+
+    @Override
+    public void deleteDoctorById(Long id) {
+        Doctor doctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with id: " + id));
+
+        doctorRepository.delete(doctor);
     }
 }
