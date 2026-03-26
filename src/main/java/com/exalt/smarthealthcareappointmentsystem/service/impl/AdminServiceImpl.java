@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.request.CreateDoctorRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.CreatePatientRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.request.UpdateDoctorRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.request.UpdatePatientRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.PatientResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
@@ -60,6 +62,20 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public DoctorResponse updateDoctorById(UpdateDoctorRequest request, Long id) {
+        Doctor doctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Doctor not found with id: " + id));
+
+        doctor.setFullName(request.fullName());
+        doctor.setSpecialty(request.specialty());
+        doctor.setAvailabilityFrom(request.availabilityFrom());
+        doctor.setAvailabilityTill(request.availabilityTill());
+
+        Doctor updatedDoctor = doctorRepository.save(doctor);
+        return doctorMapper.toDoctorResponse(updatedDoctor);
+    }
+
+    @Override
     public PatientResponse createPatient(CreatePatientRequest request) {
         userRepository.findByEmail(request.email())
                 .ifPresent(user -> {
@@ -87,5 +103,17 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> new UserNotFoundException("Patient not found with id: " + id));
 
         patientRepository.delete(patient);
+    }
+
+    @Override
+    public PatientResponse updatePatientById(UpdatePatientRequest request, Long id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Patient not found with id: " + id));
+
+        patient.setFullName(request.fullName());
+        patient.setDateOfBirth(request.dateOfBirth());
+
+        Patient updatedPatient = patientRepository.save(patient);
+        return patientMapper.toPatientResponse(updatedPatient);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
+import com.exalt.smarthealthcareappointmentsystem.exception.UserNotFoundException;
 import com.exalt.smarthealthcareappointmentsystem.mapper.DoctorMapper;
 import com.exalt.smarthealthcareappointmentsystem.repository.DoctorRepository;
 import com.exalt.smarthealthcareappointmentsystem.service.DoctorService;
@@ -30,5 +31,13 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
         return doctors.stream().map(doctorMapper::toDoctorResponse).toList();
+    }
+
+    @Override
+    public DoctorResponse getDoctorById(Long id) {
+        Doctor doctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Doctor not found with id: " + id));
+
+        return doctorMapper.toDoctorResponse(doctor);
     }
 }
