@@ -12,8 +12,8 @@ import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.PatientResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Patient;
-import com.exalt.smarthealthcareappointmentsystem.exception.DoctorNotFoundException;
 import com.exalt.smarthealthcareappointmentsystem.exception.DuplicateEmailException;
+import com.exalt.smarthealthcareappointmentsystem.exception.UserNotFoundException;
 import com.exalt.smarthealthcareappointmentsystem.mapper.DoctorMapper;
 import com.exalt.smarthealthcareappointmentsystem.mapper.PatientMapper;
 import com.exalt.smarthealthcareappointmentsystem.repository.DoctorRepository;
@@ -59,7 +59,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void deleteDoctorById(Long id) {
         Doctor doctor = doctorRepository.findById(id)
-                .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with id: " + id));
+                .orElseThrow(() -> new UserNotFoundException("Doctor not found with id: " + id));
 
         doctorRepository.delete(doctor);
     }
@@ -79,5 +79,18 @@ public class AdminServiceImpl implements AdminService {
         Patient patient = patientMapper.toPatient(request, encodedPassword);
         Patient savedPatient = patientRepository.save(patient);
         return patientMapper.toPatientResponse(savedPatient);
+    }
+
+    @Override
+    public List<PatientResponse> getAllPatients() {
+        return patientRepository.findAll().stream().map(doc -> patientMapper.toPatientResponse(doc)).toList();
+    }
+
+    @Override
+    public void deletePatientById(Long id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Patient not found with id: " + id));
+
+        patientRepository.delete(patient);
     }
 }

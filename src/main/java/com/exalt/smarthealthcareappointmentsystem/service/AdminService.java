@@ -16,4 +16,8 @@ public interface AdminService {
     void deleteDoctorById(Long id);
 
     PatientResponse createPatient(CreatePatientRequest request);
+
+    List<PatientResponse> getAllPatients();
+
+    void deletePatientById(Long id);
 }

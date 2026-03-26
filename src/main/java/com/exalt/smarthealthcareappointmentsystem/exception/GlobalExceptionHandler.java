@@ -22,8 +22,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(DoctorNotFoundException.class)
-    public ResponseEntity<ErrorObject> handleDoctorNotFoundException(DoctorNotFoundException ex, WebRequest request) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorObject> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
         ErrorObject errorObject = new ErrorObject();
         errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
         errorObject.setMessage(ex.getMessage());

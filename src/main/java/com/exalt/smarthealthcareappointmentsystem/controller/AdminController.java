@@ -39,7 +39,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/doctors/{id}")
-    public ResponseEntity<Void> deletePokemon(@PathVariable("id") Long doctorId) {
+    public ResponseEntity<Void> deleteDoctor(@PathVariable("id") Long doctorId) {
         adminService.deleteDoctorById(doctorId);
         return ResponseEntity.noContent().build();
     }
@@ -47,5 +47,16 @@ public class AdminController {
     @PostMapping("/patients")
     public ResponseEntity<PatientResponse> createPatient(@Valid @RequestBody CreatePatientRequest request) {
         return new ResponseEntity<>(adminService.createPatient(request), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/patients")
+    public ResponseEntity<List<PatientResponse>> getPatients() {
+        return ResponseEntity.ok(adminService.getAllPatients());
+    }
+
+    @DeleteMapping("/patients/{id}")
+    public ResponseEntity<Void> deletePatient(@PathVariable("id") Long patientId) {
+        adminService.deletePatientById(patientId);
+        return ResponseEntity.noContent().build();
     }
 }
