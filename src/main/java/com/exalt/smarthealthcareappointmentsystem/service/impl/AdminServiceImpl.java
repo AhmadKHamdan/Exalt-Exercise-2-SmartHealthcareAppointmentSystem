@@ -52,11 +52,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<DoctorResponse> getAllDoctors() {
-        return doctorRepository.findAll().stream().map(doc -> doctorMapper.toDoctorResponse(doc)).toList();
-    }
-
-    @Override
     public void deleteDoctorById(Long id) {
         Doctor doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Doctor not found with id: " + id));

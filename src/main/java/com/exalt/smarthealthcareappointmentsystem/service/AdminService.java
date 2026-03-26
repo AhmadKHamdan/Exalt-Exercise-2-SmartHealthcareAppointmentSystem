@@ -11,8 +11,6 @@ public interface AdminService {
 
     DoctorResponse createDoctor(CreateDoctorRequest request);
 
-    List<DoctorResponse> getAllDoctors();
-
     void deleteDoctorById(Long id);
 
     PatientResponse createPatient(CreatePatientRequest request);

@@ -33,11 +33,6 @@ public class AdminController {
         return new ResponseEntity<>(adminService.createDoctor(request), HttpStatus.CREATED);
     }
 
-    @GetMapping("/doctors")
-    public ResponseEntity<List<DoctorResponse>> getDoctors() {
-        return ResponseEntity.ok(adminService.getAllDoctors());
-    }
-
     @DeleteMapping("/doctors/{id}")
     public ResponseEntity<Void> deleteDoctor(@PathVariable("id") Long doctorId) {
         adminService.deleteDoctorById(doctorId);
