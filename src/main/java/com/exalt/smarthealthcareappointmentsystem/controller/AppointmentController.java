@@ -2,6 +2,7 @@ package com.exalt.smarthealthcareappointmentsystem.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,10 +18,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/patients")
+@RequestMapping("/api/appointments")
 @RequiredArgsConstructor
-@Tag(name = "patients")
-public class PatientController {
+@Tag(name = "Appointments")
+public class AppointmentController {
 
     private final AppointmentService appointmentService;
 
@@ -29,9 +30,9 @@ public class PatientController {
         return new ResponseEntity<>(appointmentService.bookAppointment(request), HttpStatus.CREATED);
     }
 
-    @PostMapping("/appointments/{id}")
+    @DeleteMapping("/appointments/{id}")
     public ResponseEntity<Void> deleteAppointment(@PathVariable Long id) {
-        appointmentService.cancelAppointment(id);
+        appointmentService.deleteAppointmentById(id);
         return ResponseEntity.noContent().build();
     }
 }
