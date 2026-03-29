@@ -2,8 +2,8 @@ package com.exalt.smarthealthcareappointmentsystem.mapper;
 
 import org.springframework.stereotype.Component;
 
-import com.exalt.smarthealthcareappointmentsystem.dto.request.CreateDoctorRequest;
-import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.request.doctor.CreateDoctorRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
 
 @Component

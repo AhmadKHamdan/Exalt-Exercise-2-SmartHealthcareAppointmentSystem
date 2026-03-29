@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.exalt.smarthealthcareappointmentsystem.dto.request.CreateAppointmentRequest;
-import com.exalt.smarthealthcareappointmentsystem.dto.response.AppointmentResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.request.appointment.CreateAppointmentRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.AppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Appointment;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Patient;

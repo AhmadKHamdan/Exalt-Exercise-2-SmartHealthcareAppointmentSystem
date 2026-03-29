@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.exalt.smarthealthcareappointmentsystem.dto.request.CreateAppointmentRequest;
-import com.exalt.smarthealthcareappointmentsystem.dto.response.AppointmentResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.request.appointment.CreateAppointmentRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.AppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.service.AppointmentService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;

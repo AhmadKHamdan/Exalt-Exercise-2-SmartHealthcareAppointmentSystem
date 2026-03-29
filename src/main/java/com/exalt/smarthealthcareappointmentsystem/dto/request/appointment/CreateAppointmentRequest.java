@@ -1,4 +1,4 @@
-package com.exalt.smarthealthcareappointmentsystem.dto.request;
+package com.exalt.smarthealthcareappointmentsystem.dto.request.appointment;
 
 import java.time.LocalDateTime;
 

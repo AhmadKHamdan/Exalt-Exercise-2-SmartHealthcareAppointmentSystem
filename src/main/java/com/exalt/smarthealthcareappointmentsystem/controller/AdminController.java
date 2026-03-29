@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.exalt.smarthealthcareappointmentsystem.dto.request.CreateDoctorRequest;
-import com.exalt.smarthealthcareappointmentsystem.dto.request.CreatePatientRequest;
-import com.exalt.smarthealthcareappointmentsystem.dto.request.UpdateDoctorRequest;
-import com.exalt.smarthealthcareappointmentsystem.dto.request.UpdatePatientRequest;
-import com.exalt.smarthealthcareappointmentsystem.dto.response.AppointmentResponse;
-import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
-import com.exalt.smarthealthcareappointmentsystem.dto.response.PatientResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.request.doctor.CreateDoctorRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.request.doctor.UpdateDoctorRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.request.patient.CreatePatientRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.request.patient.UpdatePatientRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.AppointmentResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.patient.PatientResponse;
 import com.exalt.smarthealthcareappointmentsystem.service.AdminService;
 
 import io.swagger.v3.oas.annotations.Operation;

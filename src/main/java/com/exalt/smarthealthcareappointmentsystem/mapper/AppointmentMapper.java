@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
-import com.exalt.smarthealthcareappointmentsystem.dto.response.AppointmentResponse;
-import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorSummaryResponse;
-import com.exalt.smarthealthcareappointmentsystem.dto.response.PatientSummaryResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.AppointmentResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorSummaryResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.patient.PatientSummaryResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Appointment;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Patient;

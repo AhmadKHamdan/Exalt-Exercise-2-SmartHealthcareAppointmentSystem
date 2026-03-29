@@ -2,7 +2,7 @@ package com.exalt.smarthealthcareappointmentsystem.service;
 
 import java.util.List;
 
-import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorResponse;
 
 public interface DoctorService {
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.exalt.smarthealthcareappointmentsystem.dto.response.DoctorResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
 import com.exalt.smarthealthcareappointmentsystem.exception.UserNotFoundException;
 import com.exalt.smarthealthcareappointmentsystem.mapper.DoctorMapper;
