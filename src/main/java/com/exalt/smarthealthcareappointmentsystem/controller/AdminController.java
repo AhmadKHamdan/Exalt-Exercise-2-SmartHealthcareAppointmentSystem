@@ -92,4 +92,11 @@ public class AdminController {
     public ResponseEntity<List<AppointmentResponse>> getAppointments() {
         return ResponseEntity.ok(appointmentService.getAllAppointments());
     }
+
+    @Operation(summary = "Mark appointment as completed")
+    @PostMapping("/appointments/{id}")
+    public ResponseEntity<Void> markAppointmentAsCompleted(@PathVariable long id) {
+        appointmentService.markAppointmentAsCompleted(id);
+        return ResponseEntity.noContent().build();
+    }
 }
