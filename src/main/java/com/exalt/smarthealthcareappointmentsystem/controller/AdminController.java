@@ -20,7 +20,9 @@ import com.exalt.smarthealthcareappointmentsystem.dto.request.patient.UpdatePati
 import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.AppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.patient.PatientResponse;
-import com.exalt.smarthealthcareappointmentsystem.service.AdminService;
+import com.exalt.smarthealthcareappointmentsystem.service.AppointmentService;
+import com.exalt.smarthealthcareappointmentsystem.service.DoctorService;
+import com.exalt.smarthealthcareappointmentsystem.service.PatientService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,18 +35,20 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Admin Management")
 public class AdminController {
 
-    private final AdminService adminService;
+    private final PatientService patientService;
+    private final DoctorService doctorService;
+    private final AppointmentService appointmentService;
 
     @Operation(summary = "Create a new doctor")
     @PostMapping("/doctors")
     public ResponseEntity<DoctorResponse> createDoctor(@Valid @RequestBody CreateDoctorRequest request) {
-        return new ResponseEntity<>(adminService.createDoctor(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(doctorService.createDoctor(request), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Delete a doctor")
     @DeleteMapping("/doctors/{id}")
     public ResponseEntity<Void> deleteDoctor(@PathVariable Long id) {
-        adminService.deleteDoctorById(id);
+        doctorService.deleteDoctorById(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -52,26 +56,26 @@ public class AdminController {
     @PutMapping("/doctors/{id}")
     public ResponseEntity<DoctorResponse> updateDoctor(@Valid @RequestBody UpdateDoctorRequest request,
             @PathVariable Long id) {
-        DoctorResponse response = adminService.updateDoctorById(request, id);
+        DoctorResponse response = doctorService.updateDoctorById(request, id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "Create a new patient")
     @PostMapping("/patients")
     public ResponseEntity<PatientResponse> createPatient(@Valid @RequestBody CreatePatientRequest request) {
-        return new ResponseEntity<>(adminService.createPatient(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(patientService.createPatient(request), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Get all patients")
     @GetMapping("/patients")
     public ResponseEntity<List<PatientResponse>> getPatients() {
-        return ResponseEntity.ok(adminService.getAllPatients());
+        return ResponseEntity.ok(patientService.getAllPatients());
     }
 
     @Operation(summary = "Delete a patient")
     @DeleteMapping("/patients/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
-        adminService.deletePatientById(id);
+        patientService.deletePatientById(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -79,13 +83,13 @@ public class AdminController {
     @PutMapping("/patients/{id}")
     public ResponseEntity<PatientResponse> updatePatient(@Valid @RequestBody UpdatePatientRequest request,
             @PathVariable Long id) {
-        PatientResponse response = adminService.updatePatientById(request, id);
+        PatientResponse response = patientService.updatePatientById(request, id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "Get all appointments")
     @GetMapping("/appointments")
     public ResponseEntity<List<AppointmentResponse>> getAppointments() {
-        return ResponseEntity.ok(adminService.getAllAppointments());
+        return ResponseEntity.ok(appointmentService.getAllAppointments());
     }
 }

@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.exalt.smarthealthcareappointmentsystem.exception.CustomAccessDeniedHandler;
+import com.exalt.smarthealthcareappointmentsystem.security.CustomAccessDeniedHandler;
 import com.exalt.smarthealthcareappointmentsystem.security.JwtAuthFilter;
 import com.exalt.smarthealthcareappointmentsystem.security.JwtAuthenticationEntryPoint;
 

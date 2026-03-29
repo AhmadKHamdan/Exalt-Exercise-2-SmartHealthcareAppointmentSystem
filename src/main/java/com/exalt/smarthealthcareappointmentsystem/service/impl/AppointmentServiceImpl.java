@@ -33,6 +33,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentMapper appointmentMapper;
 
     @Override
+    public List<AppointmentResponse> getAllAppointments() {
+        return appointmentRepository.findAll().stream().map(appointmentMapper::toAppointmentResponse).toList();
+    }
+
+    @Override
     public AppointmentResponse bookAppointment(CreateAppointmentRequest request) {
         Doctor doctor = doctorRepository.findById(request.doctorId())
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + request.doctorId()));
