@@ -17,7 +17,7 @@ public class PatientMapper {
                 patient.getDateOfBirth());
     }
 
-    public Patient toPatient(CreatePatientRequest request, String encodedPassword) {
+    public Patient toPatientEntity(CreatePatientRequest request, String encodedPassword) {
         return Patient.builder()
                 .email(request.email())
                 .fullName(request.fullName())

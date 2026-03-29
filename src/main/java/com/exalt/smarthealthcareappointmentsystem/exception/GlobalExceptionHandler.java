@@ -14,33 +14,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateEmailException.class)
     public ResponseEntity<ErrorObject> handleDuplicateEmailException(DuplicateEmailException ex, WebRequest request) {
-        ErrorObject errorObject = new ErrorObject();
-        errorObject.setStatusCode(HttpStatus.CONFLICT.value());
-        errorObject.setMessage(ex.getMessage());
-        errorObject.setTimestamp(LocalDateTime.now());
-
-        return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.CONFLICT);
+        return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorObject> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
-        ErrorObject errorObject = new ErrorObject();
-        errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
-        errorObject.setMessage(ex.getMessage());
-        errorObject.setTimestamp(LocalDateTime.now());
-
-        return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorObject> handleResourceNotFoundException(ResourceNotFoundException ex,
+            WebRequest request) {
+        return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(AppointmentConflictException.class)
     public ResponseEntity<ErrorObject> handleAppointmentConflictException(AppointmentConflictException ex,
             WebRequest request) {
-        ErrorObject errorObject = new ErrorObject();
-        errorObject.setStatusCode(HttpStatus.CONFLICT.value());
-        errorObject.setMessage(ex.getMessage());
-        errorObject.setTimestamp(LocalDateTime.now());
+        return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage());
+    }
 
-        return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.CONFLICT);
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ErrorObject> handleInvalidRequestException(InvalidRequestException ex) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -52,21 +44,20 @@ public class GlobalExceptionHandler {
                 .findFirst()
                 .orElse("Validation error");
 
-        ErrorObject errorObject = new ErrorObject();
-        errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        errorObject.setMessage(message);
-        errorObject.setTimestamp(LocalDateTime.now());
-
-        return new ResponseEntity<>(errorObject, HttpStatus.BAD_REQUEST);
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, message);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorObject> handleGlobalException(Exception ex, WebRequest request) {
+        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred.");
+    }
+
+    private ResponseEntity<ErrorObject> buildErrorResponse(HttpStatus status, String message) {
         ErrorObject errorObject = new ErrorObject();
-        errorObject.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        errorObject.setMessage(ex.getMessage());
+        errorObject.setStatusCode(status.value());
+        errorObject.setMessage(message);
         errorObject.setTimestamp(LocalDateTime.now());
 
-        return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorObject, status);
     }
 }

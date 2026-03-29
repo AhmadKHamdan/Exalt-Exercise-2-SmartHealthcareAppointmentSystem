@@ -15,8 +15,10 @@ import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorResp
 import com.exalt.smarthealthcareappointmentsystem.dto.response.patient.PatientResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Patient;
+import com.exalt.smarthealthcareappointmentsystem.enums.Role;
 import com.exalt.smarthealthcareappointmentsystem.exception.DuplicateEmailException;
-import com.exalt.smarthealthcareappointmentsystem.exception.UserNotFoundException;
+import com.exalt.smarthealthcareappointmentsystem.exception.InvalidRequestException;
+import com.exalt.smarthealthcareappointmentsystem.exception.ResourceNotFoundException;
 import com.exalt.smarthealthcareappointmentsystem.mapper.AppointmentMapper;
 import com.exalt.smarthealthcareappointmentsystem.mapper.DoctorMapper;
 import com.exalt.smarthealthcareappointmentsystem.mapper.PatientMapper;
@@ -49,11 +51,12 @@ public class AdminServiceImpl implements AdminService {
                 });
 
         if (request.availabilityFrom().isAfter(request.availabilityTill())) {
-            throw new IllegalArgumentException("Availability interval is invalid.");
+            throw new InvalidRequestException("Availability interval is invalid.");
         }
 
         String encodedPassword = passwordEncoder.encode(request.password());
-        Doctor doctor = doctorMapper.toDoctor(request, encodedPassword);
+        Doctor doctor = doctorMapper.toDoctorEntity(request, encodedPassword);
+        doctor.setRole(Role.ROLE_DOCTOR);
         Doctor savedDoctor = doctorRepository.save(doctor);
         return doctorMapper.toDoctorResponse(savedDoctor);
     }
@@ -61,7 +64,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void deleteDoctorById(Long id) {
         Doctor doctor = doctorRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Doctor not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + id));
 
         doctorRepository.delete(doctor);
     }
@@ -69,7 +72,12 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public DoctorResponse updateDoctorById(UpdateDoctorRequest request, Long id) {
         Doctor doctor = doctorRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Doctor not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + id));
+
+        if (request.availabilityFrom().isAfter(request.availabilityTill())
+                || request.availabilityFrom().equals(request.availabilityTill())) {
+            throw new InvalidRequestException("Availability interval is invalid.");
+        }
 
         doctor.setFullName(request.fullName());
         doctor.setSpecialty(request.specialty());
@@ -88,24 +96,25 @@ public class AdminServiceImpl implements AdminService {
                 });
 
         if (request.dateOfBirth().isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Date of birth is invalid.");
+            throw new InvalidRequestException("Date of birth is invalid.");
         }
 
         String encodedPassword = passwordEncoder.encode(request.password());
-        Patient patient = patientMapper.toPatient(request, encodedPassword);
+        Patient patient = patientMapper.toPatientEntity(request, encodedPassword);
+        patient.setRole(Role.ROLE_PATIENT);
         Patient savedPatient = patientRepository.save(patient);
         return patientMapper.toPatientResponse(savedPatient);
     }
 
     @Override
     public List<PatientResponse> getAllPatients() {
-        return patientRepository.findAll().stream().map(doc -> patientMapper.toPatientResponse(doc)).toList();
+        return patientRepository.findAll().stream().map(patientMapper::toPatientResponse).toList();
     }
 
     @Override
     public void deletePatientById(Long id) {
         Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Patient not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
 
         patientRepository.delete(patient);
     }
@@ -113,7 +122,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public PatientResponse updatePatientById(UpdatePatientRequest request, Long id) {
         Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Patient not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
+
+        if (request.dateOfBirth().isAfter(LocalDate.now())) {
+            throw new InvalidRequestException("Date of birth is invalid.");
+        }
 
         patient.setFullName(request.fullName());
         patient.setDateOfBirth(request.dateOfBirth());

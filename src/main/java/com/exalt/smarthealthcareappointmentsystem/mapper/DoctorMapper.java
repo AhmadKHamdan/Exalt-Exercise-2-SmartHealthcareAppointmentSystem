@@ -19,7 +19,7 @@ public class DoctorMapper {
                 doctor.getAvailabilityTill());
     }
 
-    public Doctor toDoctor(CreateDoctorRequest request, String encodedPassword) {
+    public Doctor toDoctorEntity(CreateDoctorRequest request, String encodedPassword) {
         return Doctor.builder()
                 .email(request.email())
                 .fullName(request.fullName())
