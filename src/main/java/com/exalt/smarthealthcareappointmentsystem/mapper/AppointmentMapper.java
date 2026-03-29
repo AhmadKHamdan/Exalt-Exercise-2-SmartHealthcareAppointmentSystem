@@ -5,7 +5,10 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.AppointmentResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.DoctorAppointmentResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.PatientAppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorSummaryResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.patient.PatientResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.patient.PatientSummaryResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Appointment;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
@@ -31,5 +34,22 @@ public class AppointmentMapper {
                 .patient(patient)
                 .doctor(doctor)
                 .build();
+    }
+
+    public DoctorAppointmentResponse toDoctorAppointmentResponse(Appointment appointment) {
+        Patient patient = appointment.getPatient();
+        return new DoctorAppointmentResponse(
+                appointment.getId(),
+                appointment.getAppointmentTime(),
+                new PatientResponse(patient.getId(), patient.getEmail(), patient.getFullName(),
+                        patient.getDateOfBirth()));
+    }
+
+    public PatientAppointmentResponse toPatientAppointmentResponse(Appointment appointment) {
+        Doctor doctor = appointment.getDoctor();
+        return new PatientAppointmentResponse(
+                appointment.getId(),
+                appointment.getAppointmentTime(),
+                new DoctorSummaryResponse(doctor.getId(), doctor.getFullName(), doctor.getSpecialty()));
     }
 }

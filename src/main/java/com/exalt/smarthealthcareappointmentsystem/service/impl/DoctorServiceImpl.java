@@ -2,18 +2,24 @@ package com.exalt.smarthealthcareappointmentsystem.service.impl;
 
 import java.util.List;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.request.doctor.CreateDoctorRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.doctor.UpdateDoctorRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.DoctorAppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorResponse;
+import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Appointment;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
+import com.exalt.smarthealthcareappointmentsystem.enums.AppointmentStatus;
 import com.exalt.smarthealthcareappointmentsystem.enums.Role;
 import com.exalt.smarthealthcareappointmentsystem.exception.DuplicateEmailException;
 import com.exalt.smarthealthcareappointmentsystem.exception.InvalidRequestException;
 import com.exalt.smarthealthcareappointmentsystem.exception.ResourceNotFoundException;
+import com.exalt.smarthealthcareappointmentsystem.mapper.AppointmentMapper;
 import com.exalt.smarthealthcareappointmentsystem.mapper.DoctorMapper;
+import com.exalt.smarthealthcareappointmentsystem.repository.AppointmentRepository;
 import com.exalt.smarthealthcareappointmentsystem.repository.DoctorRepository;
 import com.exalt.smarthealthcareappointmentsystem.repository.UserRepository;
 import com.exalt.smarthealthcareappointmentsystem.service.DoctorService;
@@ -27,6 +33,8 @@ public class DoctorServiceImpl implements DoctorService {
     private final DoctorRepository doctorRepository;
     private final DoctorMapper doctorMapper;
     private final UserRepository userRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final AppointmentMapper appointmentMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -93,5 +101,17 @@ public class DoctorServiceImpl implements DoctorService {
 
         Doctor updatedDoctor = doctorRepository.save(doctor);
         return doctorMapper.toDoctorResponse(updatedDoctor);
+    }
+
+    @Override
+    public List<DoctorAppointmentResponse> getMyAppointments() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Doctor doctor = doctorRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with email: " + email));
+
+        List<Appointment> appointments = appointmentRepository.findByDoctorIdAndStatus(doctor.getId(),
+                AppointmentStatus.BOOKED);
+
+        return appointments.stream().map(appointmentMapper::toDoctorAppointmentResponse).toList();
     }
 }

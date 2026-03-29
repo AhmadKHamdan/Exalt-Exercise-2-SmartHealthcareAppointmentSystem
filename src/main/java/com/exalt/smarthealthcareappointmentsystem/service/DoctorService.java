@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.request.doctor.CreateDoctorRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.doctor.UpdateDoctorRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.DoctorAppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorResponse;
 
 public interface DoctorService {
@@ -17,4 +18,6 @@ public interface DoctorService {
     void deleteDoctorById(Long id);
 
     DoctorResponse updateDoctorById(UpdateDoctorRequest request, Long doctorId);
+
+    List<DoctorAppointmentResponse> getMyAppointments();
 }

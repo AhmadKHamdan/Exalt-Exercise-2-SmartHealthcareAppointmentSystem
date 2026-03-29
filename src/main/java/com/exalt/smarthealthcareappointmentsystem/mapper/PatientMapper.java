@@ -3,6 +3,7 @@ package com.exalt.smarthealthcareappointmentsystem.mapper;
 import org.springframework.stereotype.Component;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.request.patient.CreatePatientRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.patient.MyPatientProfileResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.patient.PatientResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Patient;
 
@@ -24,5 +25,12 @@ public class PatientMapper {
                 .password(encodedPassword)
                 .dateOfBirth(request.dateOfBirth())
                 .build();
+    }
+
+    public MyPatientProfileResponse toMyPatientProfileResponse(Patient patient) {
+        return new MyPatientProfileResponse(
+                patient.getEmail(),
+                patient.getFullName(),
+                patient.getDateOfBirth());
     }
 }

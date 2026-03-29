@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.request.appointment.CreateAppointmentRequest;
@@ -39,17 +40,19 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public AppointmentResponse bookAppointment(CreateAppointmentRequest request) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Patient patient = patientRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with email: " + email));
+
         Doctor doctor = doctorRepository.findById(request.doctorId())
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + request.doctorId()));
-
-        Patient patient = patientRepository.findById(request.patientId())
-                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + request.patientId()));
 
         if (request.appointmentTime().isBefore(LocalDateTime.now())) {
             throw new InvalidRequestException("Appointment time cannot be in the past.");
         }
 
-        List<Appointment> bookedAppointmentsForDoctor = appointmentRepository.findByDoctorId(doctor.getId());
+        List<Appointment> bookedAppointmentsForDoctor = appointmentRepository.findByDoctorIdAndStatus(doctor.getId(),
+                AppointmentStatus.BOOKED);
 
         LocalDateTime requestedEnd = request.appointmentTime().plusMinutes(30);
         LocalTime requestedTime = request.appointmentTime().toLocalTime();

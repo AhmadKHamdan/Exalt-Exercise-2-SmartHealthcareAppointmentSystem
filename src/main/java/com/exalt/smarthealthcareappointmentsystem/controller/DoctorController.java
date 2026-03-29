@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.DoctorAppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorResponse;
 import com.exalt.smarthealthcareappointmentsystem.service.DoctorService;
 
@@ -34,5 +35,11 @@ public class DoctorController {
     @GetMapping("/{id}")
     public ResponseEntity<DoctorResponse> getDoctor(@PathVariable Long id) {
         return ResponseEntity.ok(doctorService.getDoctorById(id));
+    }
+
+    @Operation(summary = "Get my appointments")
+    @GetMapping("/me/appointments")
+    public ResponseEntity<List<DoctorAppointmentResponse>> getMyAppointments() {
+        return ResponseEntity.ok(doctorService.getMyAppointments());
     }
 }

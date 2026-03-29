@@ -6,9 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Appointment;
+import com.exalt.smarthealthcareappointmentsystem.enums.AppointmentStatus;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
-    List<Appointment> findByDoctorId(Long id);
+    List<Appointment> findByDoctorIdAndStatus(Long id, AppointmentStatus status);
+
+    List<Appointment> findByPatientIdAndStatus(Long id, AppointmentStatus status);
 }
