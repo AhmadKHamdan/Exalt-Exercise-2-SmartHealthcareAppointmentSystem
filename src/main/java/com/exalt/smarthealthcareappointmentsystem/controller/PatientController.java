@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.patient.UpdatePatientRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.PatientAppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.patient.MyPatientProfileResponse;
+import com.exalt.smarthealthcareappointmentsystem.service.AppointmentService;
 import com.exalt.smarthealthcareappointmentsystem.service.PatientService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,11 +27,12 @@ import lombok.RequiredArgsConstructor;
 public class PatientController {
 
     private final PatientService patientService;
+    private final AppointmentService appointmentService;
 
     @Operation(summary = "Get my appointments")
     @GetMapping("/me/appointments")
     public ResponseEntity<List<PatientAppointmentResponse>> getMyAppointments() {
-        return ResponseEntity.ok(patientService.getMyAppointments());
+        return ResponseEntity.ok(appointmentService.getAppointmentsForCurrentPatient());
     }
 
     @Operation(summary = "Update my profile")

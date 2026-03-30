@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.request.appointment.CreateAppointmentRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.AppointmentResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.DoctorAppointmentResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.PatientAppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Appointment;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Patient;
@@ -99,5 +101,29 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         appointment.setStatus(AppointmentStatus.COMPLETED);
         appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public List<PatientAppointmentResponse> getAppointmentsForCurrentPatient() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Patient patient = patientRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with email: " + email));
+
+        List<Appointment> appointments = appointmentRepository.findByPatientIdAndStatus(patient.getId(),
+                AppointmentStatus.BOOKED);
+
+        return appointments.stream().map(appointmentMapper::toPatientAppointmentResponse).toList();
+    }
+
+    @Override
+    public List<DoctorAppointmentResponse> getAppointmentsForCurrentDoctor() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Doctor doctor = doctorRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with email: " + email));
+
+        List<Appointment> appointments = appointmentRepository.findByDoctorIdAndStatus(doctor.getId(),
+                AppointmentStatus.BOOKED);
+
+        return appointments.stream().map(appointmentMapper::toDoctorAppointmentResponse).toList();
     }
 }

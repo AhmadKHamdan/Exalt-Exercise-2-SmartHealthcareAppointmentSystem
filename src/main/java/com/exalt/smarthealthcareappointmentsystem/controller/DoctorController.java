@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.DoctorAppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorResponse;
+import com.exalt.smarthealthcareappointmentsystem.service.AppointmentService;
 import com.exalt.smarthealthcareappointmentsystem.service.DoctorService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class DoctorController {
 
     private final DoctorService doctorService;
+    private final AppointmentService appointmentService;
 
     @Operation(summary = "Get all doctors")
     @GetMapping
@@ -40,6 +42,6 @@ public class DoctorController {
     @Operation(summary = "Get my appointments")
     @GetMapping("/me/appointments")
     public ResponseEntity<List<DoctorAppointmentResponse>> getMyAppointments() {
-        return ResponseEntity.ok(doctorService.getMyAppointments());
+        return ResponseEntity.ok(appointmentService.getAppointmentsForCurrentDoctor());
     }
 }

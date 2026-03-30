@@ -9,19 +9,14 @@ import org.springframework.stereotype.Service;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.request.patient.CreatePatientRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.patient.UpdatePatientRequest;
-import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.PatientAppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.patient.MyPatientProfileResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.patient.PatientResponse;
-import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Appointment;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Patient;
-import com.exalt.smarthealthcareappointmentsystem.enums.AppointmentStatus;
 import com.exalt.smarthealthcareappointmentsystem.enums.Role;
 import com.exalt.smarthealthcareappointmentsystem.exception.DuplicateEmailException;
 import com.exalt.smarthealthcareappointmentsystem.exception.InvalidRequestException;
 import com.exalt.smarthealthcareappointmentsystem.exception.ResourceNotFoundException;
-import com.exalt.smarthealthcareappointmentsystem.mapper.AppointmentMapper;
 import com.exalt.smarthealthcareappointmentsystem.mapper.PatientMapper;
-import com.exalt.smarthealthcareappointmentsystem.repository.AppointmentRepository;
 import com.exalt.smarthealthcareappointmentsystem.repository.PatientRepository;
 import com.exalt.smarthealthcareappointmentsystem.repository.UserRepository;
 import com.exalt.smarthealthcareappointmentsystem.service.PatientService;
@@ -35,8 +30,6 @@ public class PatientServiceImpl implements PatientService {
     private final UserRepository userRepository;
     private final PatientRepository patientRepository;
     private final PatientMapper patientMapper;
-    private final AppointmentRepository appointmentRepository;
-    private final AppointmentMapper appointmentMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -84,18 +77,6 @@ public class PatientServiceImpl implements PatientService {
 
         Patient updatedPatient = patientRepository.save(patient);
         return patientMapper.toPatientResponse(updatedPatient);
-    }
-
-    @Override
-    public List<PatientAppointmentResponse> getMyAppointments() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Patient patient = patientRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with email: " + email));
-
-        List<Appointment> appointments = appointmentRepository.findByPatientIdAndStatus(patient.getId(),
-                AppointmentStatus.BOOKED);
-
-        return appointments.stream().map(appointmentMapper::toPatientAppointmentResponse).toList();
     }
 
     @Override
