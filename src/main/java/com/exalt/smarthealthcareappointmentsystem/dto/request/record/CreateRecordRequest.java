@@ -2,7 +2,10 @@ package com.exalt.smarthealthcareappointmentsystem.dto.request.record;
 
 import java.util.List;
 
-public record CreateRecordRequest(Long patientId, Long appointmentId, String diagnosis,
-        List<String> prescriptions, List<String> labResults) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record CreateRecordRequest(@NotNull Long patientId, @NotNull Long appointmentId, @NotBlank String diagnosis,
+        List<@NotBlank String> prescriptions, List<@NotBlank String> labResults) {
 
 }

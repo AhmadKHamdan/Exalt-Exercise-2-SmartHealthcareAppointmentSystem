@@ -25,14 +25,14 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
 
-    @PostMapping("/appointments")
+    @PostMapping
     public ResponseEntity<AppointmentResponse> createAppointment(@Valid @RequestBody CreateAppointmentRequest request) {
         return new ResponseEntity<>(appointmentService.bookAppointment(request), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/appointments/{id}")
-    public ResponseEntity<Void> deleteAppointment(@PathVariable Long id) {
-        appointmentService.deleteAppointmentById(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> cancelAppointment(@PathVariable Long id) {
+        appointmentService.cancelAppointmentById(id);
         return ResponseEntity.noContent().build();
     }
 }

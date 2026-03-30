@@ -94,7 +94,7 @@ public class AdminController {
     }
 
     @Operation(summary = "Mark appointment as completed")
-    @PostMapping("/appointments/{id}")
+    @PutMapping("/appointments/{id}")
     public ResponseEntity<Void> markAppointmentAsCompleted(@PathVariable long id) {
         appointmentService.markAppointmentAsCompleted(id);
         return ResponseEntity.noContent().build();
