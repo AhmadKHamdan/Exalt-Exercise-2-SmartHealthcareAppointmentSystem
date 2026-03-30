@@ -5,13 +5,17 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.request.record.CreateRecordRequest;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.record.RecordDetailsResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.record.RecordResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Appointment;
 import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Record;
+import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Patient;
+import com.exalt.smarthealthcareappointmentsystem.exception.AccessDeniedException;
 import com.exalt.smarthealthcareappointmentsystem.exception.ResourceNotFoundException;
 import com.exalt.smarthealthcareappointmentsystem.mapper.RecordMapper;
 import com.exalt.smarthealthcareappointmentsystem.repository.AppointmentRepository;
+import com.exalt.smarthealthcareappointmentsystem.repository.DoctorRepository;
 import com.exalt.smarthealthcareappointmentsystem.repository.PatientRepository;
 import com.exalt.smarthealthcareappointmentsystem.repository.RecordRepository;
 import com.exalt.smarthealthcareappointmentsystem.service.RecordService;
@@ -24,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class RecordServiceImpl implements RecordService {
 
     private final RecordRepository recordRepository;
+    private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
     private final AppointmentRepository appointmentRepository;
     private final RecordMapper recordMapper;
@@ -46,10 +51,51 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public void deleteRecordById(String id) {
         Long doctorId = authenticationUtils.getAuthenticatedDoctor().getId();
-        List<Record> records = recordRepository.getByDoctorId(doctorId);
+        List<Record> records = recordRepository.findByDoctorId(doctorId);
         Record record = records.stream().filter(rec -> rec.getId().equals(id)).findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Record not found with id: " + id));
 
         recordRepository.delete(record);
+    }
+
+    @Override
+    public RecordDetailsResponse getRecordById(String id) {
+        Record record = recordRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Record not found with id: " + id));
+
+        Doctor doctor = doctorRepository.findById(record.getDoctorId())
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + record.getDoctorId()));
+
+        Patient patient = patientRepository.findById(record.getPatientId())
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Patient not found with id: " + record.getPatientId()));
+
+        Appointment appointment = appointmentRepository.findById(record.getAppointmentId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Appointment not found with id: " + record.getAppointmentId()));
+
+        if (!isDoctorOwner(record, doctor) && !isPatientOwner(record, patient)) {
+            throw new AccessDeniedException("You are not allowed to access this record");
+        }
+
+        return recordMapper.toRecordDetailsResponse(record, doctor, patient, appointment);
+    }
+
+    private boolean isPatientOwner(Record record, Patient patient) {
+        if (!authenticationUtils.getAuthenticatedAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_PATIENT"))) {
+            return false;
+        }
+
+        return patient.getId().equals(record.getPatientId());
+    }
+
+    private boolean isDoctorOwner(Record record, Doctor doctor) {
+        if (!authenticationUtils.getAuthenticatedAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_DOCTOR"))) {
+            return false;
+        }
+
+        return doctor.getId().equals(record.getDoctorId());
     }
 }

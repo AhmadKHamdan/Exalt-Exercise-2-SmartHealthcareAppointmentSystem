@@ -10,5 +10,7 @@ import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Record;
 @Repository
 public interface RecordRepository extends MongoRepository<Record, String> {
 
-    List<Record> getByDoctorId(Long doctorId);
+    List<Record> findByDoctorId(Long doctorId);
+
+    List<Record> findByPatientId(Long doctorId);
 }

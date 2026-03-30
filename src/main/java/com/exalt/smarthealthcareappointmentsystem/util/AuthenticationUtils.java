@@ -1,5 +1,8 @@
 package com.exalt.smarthealthcareappointmentsystem.util;
 
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +23,10 @@ public class AuthenticationUtils {
 
     public String getAuthenticatedEmail() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthenticatedAuthorities() {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities();
     }
 
     public Doctor getAuthenticatedDoctor() {
