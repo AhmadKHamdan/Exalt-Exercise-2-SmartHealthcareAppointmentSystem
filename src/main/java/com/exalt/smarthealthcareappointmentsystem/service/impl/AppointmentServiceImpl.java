@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.exalt.smarthealthcareappointmentsystem.dto.request.appointment.CreateAppointmentRequest;
@@ -21,8 +20,8 @@ import com.exalt.smarthealthcareappointmentsystem.exception.ResourceNotFoundExce
 import com.exalt.smarthealthcareappointmentsystem.mapper.AppointmentMapper;
 import com.exalt.smarthealthcareappointmentsystem.repository.AppointmentRepository;
 import com.exalt.smarthealthcareappointmentsystem.repository.DoctorRepository;
-import com.exalt.smarthealthcareappointmentsystem.repository.PatientRepository;
 import com.exalt.smarthealthcareappointmentsystem.service.AppointmentService;
+import com.exalt.smarthealthcareappointmentsystem.util.AuthenticationUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,10 +29,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AppointmentServiceImpl implements AppointmentService {
 
-    private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
     private final AppointmentRepository appointmentRepository;
     private final AppointmentMapper appointmentMapper;
+    private final AuthenticationUtils authenticationUtils;
 
     @Override
     public List<AppointmentResponse> getAllAppointments() {
@@ -42,10 +41,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public AppointmentResponse bookAppointment(CreateAppointmentRequest request) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Patient patient = patientRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with email: " + email));
-
+        Patient patient = authenticationUtils.getAuthenticatedPatient();
         Doctor doctor = doctorRepository.findById(request.doctorId())
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + request.doctorId()));
 
@@ -105,10 +101,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<PatientAppointmentResponse> getAppointmentsForCurrentPatient() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Patient patient = patientRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with email: " + email));
-
+        Patient patient = authenticationUtils.getAuthenticatedPatient();
         List<Appointment> appointments = appointmentRepository.findByPatientIdAndStatus(patient.getId(),
                 AppointmentStatus.BOOKED);
 
@@ -117,10 +110,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<DoctorAppointmentResponse> getAppointmentsForCurrentDoctor() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Doctor doctor = doctorRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with email: " + email));
-
+        Doctor doctor = authenticationUtils.getAuthenticatedDoctor();
         List<Appointment> appointments = appointmentRepository.findByDoctorIdAndStatus(doctor.getId(),
                 AppointmentStatus.BOOKED);
 

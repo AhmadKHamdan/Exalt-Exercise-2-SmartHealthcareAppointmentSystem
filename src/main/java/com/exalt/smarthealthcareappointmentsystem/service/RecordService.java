@@ -7,9 +7,9 @@ public interface RecordService {
 
     RecordResponse createRecord(CreateRecordRequest request);
 
-    // RecordResponse updateRecordById(UpdateRecordRequest request, Long recordId);
+    void deleteRecordById(String id);
 
-    // void deleteRecordById(Long id);
+    // RecordResponse updateRecordById(UpdateRecordRequest request, Long recordId);
 
     // RecordResponse getRecordById();
 

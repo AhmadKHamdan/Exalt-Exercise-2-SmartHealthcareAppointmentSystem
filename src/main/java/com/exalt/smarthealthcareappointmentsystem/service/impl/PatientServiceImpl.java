@@ -3,7 +3,6 @@ package com.exalt.smarthealthcareappointmentsystem.service.impl;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +19,7 @@ import com.exalt.smarthealthcareappointmentsystem.mapper.PatientMapper;
 import com.exalt.smarthealthcareappointmentsystem.repository.PatientRepository;
 import com.exalt.smarthealthcareappointmentsystem.repository.UserRepository;
 import com.exalt.smarthealthcareappointmentsystem.service.PatientService;
+import com.exalt.smarthealthcareappointmentsystem.util.AuthenticationUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +31,7 @@ public class PatientServiceImpl implements PatientService {
     private final PatientRepository patientRepository;
     private final PatientMapper patientMapper;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationUtils authenticationUtils;
 
     @Override
     public PatientResponse createPatient(CreatePatientRequest request) {
@@ -81,9 +82,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public MyPatientProfileResponse updateMyProfile(UpdatePatientRequest request) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Patient patient = patientRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Patient not found with email: " + email));
+        Patient patient = authenticationUtils.getAuthenticatedPatient();
 
         if (request.dateOfBirth().isAfter(LocalDate.now())) {
             throw new InvalidRequestException("Date of birth is invalid.");
