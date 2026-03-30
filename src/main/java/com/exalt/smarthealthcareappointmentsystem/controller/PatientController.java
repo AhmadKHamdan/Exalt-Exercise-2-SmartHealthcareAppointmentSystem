@@ -29,13 +29,13 @@ public class PatientController {
     private final PatientService patientService;
     private final AppointmentService appointmentService;
 
-    @Operation(summary = "Get my appointments")
+    @Operation(summary = "Retrieve all appointments for the current patient")
     @GetMapping("/me/appointments")
     public ResponseEntity<List<PatientAppointmentResponse>> getMyAppointments() {
         return ResponseEntity.ok(appointmentService.getAppointmentsForCurrentPatient());
     }
 
-    @Operation(summary = "Update my profile")
+    @Operation(summary = "Update current patient's profile information")
     @PutMapping("/me")
     public ResponseEntity<MyPatientProfileResponse> updateMe(@Valid @RequestBody UpdatePatientRequest request) {
         return ResponseEntity.ok(patientService.updateMyProfile(request));

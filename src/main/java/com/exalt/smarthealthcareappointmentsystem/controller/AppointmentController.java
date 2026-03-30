@@ -13,6 +13,7 @@ import com.exalt.smarthealthcareappointmentsystem.dto.request.appointment.Create
 import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.AppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.service.AppointmentService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,13 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
 
     @PostMapping
+    @Operation(summary = "Book a new appointment with a doctor")
     public ResponseEntity<AppointmentResponse> createAppointment(@Valid @RequestBody CreateAppointmentRequest request) {
         return new ResponseEntity<>(appointmentService.bookAppointment(request), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Cancel an existing appointment by ID")
     public ResponseEntity<Void> cancelAppointment(@PathVariable Long id) {
         appointmentService.cancelAppointmentById(id);
         return ResponseEntity.noContent().build();

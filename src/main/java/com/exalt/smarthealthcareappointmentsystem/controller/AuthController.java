@@ -23,7 +23,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(summary = "User log in")
+    @Operation(summary = "Authenticate user and generate JWT token")
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));

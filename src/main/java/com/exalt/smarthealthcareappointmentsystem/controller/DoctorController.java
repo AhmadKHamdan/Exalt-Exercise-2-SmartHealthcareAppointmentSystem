@@ -27,19 +27,19 @@ public class DoctorController {
     private final DoctorService doctorService;
     private final AppointmentService appointmentService;
 
-    @Operation(summary = "Get all doctors")
+    @Operation(summary = "Retrieve all doctors with optional specialty filter")
     @GetMapping
     public ResponseEntity<List<DoctorResponse>> getDoctors(@RequestParam(required = false) String specialty) {
         return ResponseEntity.ok(doctorService.getDoctors(specialty));
     }
 
-    @Operation(summary = "Get a doctor by ID")
+    @Operation(summary = "Retrieve a specific doctor by ID")
     @GetMapping("/{id}")
     public ResponseEntity<DoctorResponse> getDoctor(@PathVariable Long id) {
         return ResponseEntity.ok(doctorService.getDoctorById(id));
     }
 
-    @Operation(summary = "Get my appointments")
+    @Operation(summary = "Retrieve all upcoming appointments for the current doctor")
     @GetMapping("/me/appointments")
     public ResponseEntity<List<DoctorAppointmentResponse>> getMyAppointments() {
         return ResponseEntity.ok(appointmentService.getAppointmentsForCurrentDoctor());

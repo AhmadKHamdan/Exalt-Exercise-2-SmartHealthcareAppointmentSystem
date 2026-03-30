@@ -39,20 +39,20 @@ public class AdminController {
     private final DoctorService doctorService;
     private final AppointmentService appointmentService;
 
-    @Operation(summary = "Create a new doctor")
+    @Operation(summary = "Create a new doctor account (Admin only)")
     @PostMapping("/doctors")
     public ResponseEntity<DoctorResponse> createDoctor(@Valid @RequestBody CreateDoctorRequest request) {
         return new ResponseEntity<>(doctorService.createDoctor(request), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Delete a doctor")
+    @Operation(summary = "Delete a doctor account by ID (Admin only)")
     @DeleteMapping("/doctors/{id}")
     public ResponseEntity<Void> deleteDoctor(@PathVariable Long id) {
         doctorService.deleteDoctorById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Update a doctor")
+    @Operation(summary = "Update doctor information by ID (Admin only)")
     @PutMapping("/doctors/{id}")
     public ResponseEntity<DoctorResponse> updateDoctor(@Valid @RequestBody UpdateDoctorRequest request,
             @PathVariable Long id) {
@@ -60,26 +60,26 @@ public class AdminController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Create a new patient")
+    @Operation(summary = "Create a new patient account (Admin only)")
     @PostMapping("/patients")
     public ResponseEntity<PatientResponse> createPatient(@Valid @RequestBody CreatePatientRequest request) {
         return new ResponseEntity<>(patientService.createPatient(request), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Get all patients")
+    @Operation(summary = "Retrieve all patients registered in the system (Admin only)")
     @GetMapping("/patients")
     public ResponseEntity<List<PatientResponse>> getPatients() {
         return ResponseEntity.ok(patientService.getAllPatients());
     }
 
-    @Operation(summary = "Delete a patient")
+    @Operation(summary = "Delete a patient account by ID (Admin only)")
     @DeleteMapping("/patients/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
         patientService.deletePatientById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Update a patient")
+    @Operation(summary = "Update patient information by ID (Admin only)")
     @PutMapping("/patients/{id}")
     public ResponseEntity<PatientResponse> updatePatient(@Valid @RequestBody UpdatePatientRequest request,
             @PathVariable Long id) {
@@ -87,13 +87,13 @@ public class AdminController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get all appointments")
+    @Operation(summary = "Retrieve all appointments in the system (Admin only)")
     @GetMapping("/appointments")
     public ResponseEntity<List<AppointmentResponse>> getAppointments() {
         return ResponseEntity.ok(appointmentService.getAllAppointments());
     }
 
-    @Operation(summary = "Mark appointment as completed")
+    @Operation(summary = "Mark an appointment as completed (Admin only)")
     @PutMapping("/appointments/{id}")
     public ResponseEntity<Void> markAppointmentAsCompleted(@PathVariable long id) {
         appointmentService.markAppointmentAsCompleted(id);
