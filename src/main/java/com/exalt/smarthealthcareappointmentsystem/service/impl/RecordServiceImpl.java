@@ -8,6 +8,7 @@ import com.exalt.smarthealthcareappointmentsystem.audit.LogAction;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.record.CreateRecordRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.record.RecordDetailsResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.record.RecordResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.record.RecordSummaryResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Appointment;
 import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Record;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
@@ -112,5 +113,12 @@ public class RecordServiceImpl implements RecordService {
         }
 
         throw new AccessDeniedException("You are not allowed to access this record.");
+    }
+
+    @Override
+    public List<RecordSummaryResponse> getRecordsForCurrentPatient() {
+        Long patientId = authenticationUtils.getAuthenticatedPatient().getId();
+        List<Record> records = recordRepository.findByPatientId(patientId);
+        return records.stream().map(recordMapper::toRecordSummaryResponse).toList();
     }
 }

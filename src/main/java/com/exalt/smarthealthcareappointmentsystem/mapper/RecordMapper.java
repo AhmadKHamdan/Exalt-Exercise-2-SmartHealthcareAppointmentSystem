@@ -10,6 +10,7 @@ import com.exalt.smarthealthcareappointmentsystem.dto.response.doctor.DoctorSumm
 import com.exalt.smarthealthcareappointmentsystem.dto.response.patient.PatientSummaryResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.record.RecordDetailsResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.record.RecordResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.record.RecordSummaryResponse;
 import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Appointment;
 import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Record;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
@@ -39,5 +40,10 @@ public class RecordMapper {
                         appointment.getStatus()),
                 new PatientSummaryResponse(patient.getId(), patient.getFullName()), record.getDiagnosis(),
                 record.getPrescriptions(), record.getLabResults(), record.getPrescriptionDate());
+    }
+
+    public RecordSummaryResponse toRecordSummaryResponse(Record record) {
+        return new RecordSummaryResponse(record.getId(), record.getDoctorId(), record.getAppointmentId(),
+                record.getDiagnosis(), record.getPrescriptions(), record.getLabResults(), record.getPrescriptionDate());
     }
 }

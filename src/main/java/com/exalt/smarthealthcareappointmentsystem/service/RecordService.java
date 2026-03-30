@@ -1,8 +1,11 @@
 package com.exalt.smarthealthcareappointmentsystem.service;
 
+import java.util.List;
+
 import com.exalt.smarthealthcareappointmentsystem.dto.request.record.CreateRecordRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.record.RecordDetailsResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.record.RecordResponse;
+import com.exalt.smarthealthcareappointmentsystem.dto.response.record.RecordSummaryResponse;
 
 public interface RecordService {
 
@@ -11,4 +14,6 @@ public interface RecordService {
     void deleteRecordById(String id);
 
     RecordDetailsResponse getRecordById(String id);    
+
+    List<RecordSummaryResponse> getRecordsForCurrentPatient();
 }
