@@ -43,10 +43,11 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/appointments/**").hasAuthority("ROLE_PATIENT")
-                        .requestMatchers(HttpMethod.GET, "/api/doctors/me/**").hasAuthority("ROLE_DOCTOR")
-                        .requestMatchers(HttpMethod.GET, "/api/doctors/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/patients/me/**").hasAuthority("ROLE_PATIENT")
-                        .requestMatchers(HttpMethod.GET, "/api/records").hasAuthority("ROLE_DOCTOR")
+                        .requestMatchers("/api/doctors/me/**").hasAuthority("ROLE_DOCTOR")
+                        .requestMatchers("/api/doctors/**").permitAll()
+                        .requestMatchers("/api/patients/me/**").hasAuthority("ROLE_PATIENT")
+                        .requestMatchers(HttpMethod.GET, "/api/records/**").hasAnyAuthority("ROLE_DOCTOR", "ROLE_PATIENT")
+                        .requestMatchers("/api/records/**").hasAuthority("ROLE_DOCTOR")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
