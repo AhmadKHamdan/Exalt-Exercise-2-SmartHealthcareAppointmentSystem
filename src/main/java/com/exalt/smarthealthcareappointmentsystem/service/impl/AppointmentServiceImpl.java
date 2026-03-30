@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.exalt.smarthealthcareappointmentsystem.audit.LogAction;
 import com.exalt.smarthealthcareappointmentsystem.dto.request.appointment.CreateAppointmentRequest;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.AppointmentResponse;
 import com.exalt.smarthealthcareappointmentsystem.dto.response.appointment.DoctorAppointmentResponse;
@@ -14,6 +15,7 @@ import com.exalt.smarthealthcareappointmentsystem.entity.appointment.Appointment
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Doctor;
 import com.exalt.smarthealthcareappointmentsystem.entity.user.Patient;
 import com.exalt.smarthealthcareappointmentsystem.enums.AppointmentStatus;
+import com.exalt.smarthealthcareappointmentsystem.exception.AccessDeniedException;
 import com.exalt.smarthealthcareappointmentsystem.exception.AppointmentConflictException;
 import com.exalt.smarthealthcareappointmentsystem.exception.InvalidRequestException;
 import com.exalt.smarthealthcareappointmentsystem.exception.ResourceNotFoundException;
@@ -40,6 +42,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @LogAction("Appointment booked")
     public AppointmentResponse bookAppointment(CreateAppointmentRequest request) {
         Patient patient = authenticationUtils.getAuthenticatedPatient();
         Doctor doctor = doctorRepository.findById(request.doctorId())
@@ -82,9 +85,24 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void deleteAppointmentById(Long id) {
+    @LogAction("Appointment cancelled")
+    public void cancelAppointmentById(Long id) {
+        Patient patient = authenticationUtils.getAuthenticatedPatient();
+
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + id));
+
+        if (!appointment.getPatient().getId().equals(patient.getId())) {
+            throw new AccessDeniedException("You are not allowed to cancel this appointment.");
+        }
+
+        if (appointment.getStatus() == AppointmentStatus.CANCELED) {
+            throw new InvalidRequestException("Appointment is already canceled.");
+        }
+
+        if (appointment.getStatus() == AppointmentStatus.COMPLETED) {
+            throw new InvalidRequestException("Completed appointments cannot be canceled.");
+        }
 
         appointment.setStatus(AppointmentStatus.CANCELED);
         appointmentRepository.save(appointment);

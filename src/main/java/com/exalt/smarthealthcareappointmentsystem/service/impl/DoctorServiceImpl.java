@@ -57,7 +57,7 @@ public class DoctorServiceImpl implements DoctorService {
                     throw new DuplicateEmailException("An account with this email already exists.");
                 });
 
-        if (request.availabilityFrom().isAfter(request.availabilityTill())) {
+        if (!request.availabilityFrom().isBefore(request.availabilityTill())) {
             throw new InvalidRequestException("Availability interval is invalid.");
         }
 

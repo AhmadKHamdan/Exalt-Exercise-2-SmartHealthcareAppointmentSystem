@@ -17,7 +17,7 @@ public interface AppointmentService {
 
     AppointmentResponse bookAppointment(CreateAppointmentRequest request);
 
-    void deleteAppointmentById(Long id);
+    void cancelAppointmentById(Long id);
 
     void markAppointmentAsCompleted(Long id);
 }
