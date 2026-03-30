@@ -12,5 +12,5 @@ public interface RecordRepository extends MongoRepository<Record, String> {
 
     List<Record> findByDoctorId(Long doctorId);
 
-    List<Record> findByPatientId(Long doctorId);
+    List<Record> findByPatientId(Long patientId);
 }
