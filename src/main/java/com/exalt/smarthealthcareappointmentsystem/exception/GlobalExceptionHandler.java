@@ -54,11 +54,6 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, message);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorObject> handleGlobalException(Exception ex) {
-        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred.");
-    }
-
     private ResponseEntity<ErrorObject> buildErrorResponse(HttpStatus status, String message) {
         ErrorObject errorObject = new ErrorObject();
         errorObject.setStatusCode(status.value());

@@ -81,8 +81,7 @@ public class DoctorServiceImpl implements DoctorService {
         Doctor doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + id));
 
-        if (request.availabilityFrom().isAfter(request.availabilityTill())
-                || request.availabilityFrom().equals(request.availabilityTill())) {
+        if (!request.availabilityFrom().isBefore(request.availabilityTill())) {
             throw new InvalidRequestException("Availability interval is invalid.");
         }
 

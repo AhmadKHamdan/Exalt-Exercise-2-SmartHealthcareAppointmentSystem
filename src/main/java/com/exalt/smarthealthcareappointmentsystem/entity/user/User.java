@@ -3,12 +3,15 @@ package com.exalt.smarthealthcareappointmentsystem.entity.user;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.exalt.smarthealthcareappointmentsystem.enums.Role;
 
+import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,6 +29,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "users")
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 @AllArgsConstructor
