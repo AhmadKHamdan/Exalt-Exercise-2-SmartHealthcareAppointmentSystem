@@ -85,7 +85,7 @@ Controller → Service → Repository → Database
 
 ### Clone
 
-    git clone <your-repo-url>
+    git clone https://github.com/AhmadKHamdan/Exalt-Exercise-2-SmartHealthcareAppointmentSystem
     cd smart-healthcare-appointment-system
 
 ### Configure
