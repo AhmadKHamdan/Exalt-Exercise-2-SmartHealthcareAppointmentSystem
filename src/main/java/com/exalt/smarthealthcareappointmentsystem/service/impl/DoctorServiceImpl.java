@@ -77,9 +77,9 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public DoctorResponse updateDoctorById(UpdateDoctorRequest request, Long id) {
-        Doctor doctor = doctorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + id));
+    public DoctorResponse updateDoctorById(UpdateDoctorRequest request, Long doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + doctorId));
 
         if (!request.availabilityFrom().isBefore(request.availabilityTill())) {
             throw new InvalidRequestException("Availability interval is invalid.");

@@ -69,10 +69,13 @@ public class RecordServiceImpl implements RecordService {
     @Override
     @LogAction("Record deleted")
     public void deleteRecordById(String id) {
-        Long doctorId = authenticationUtils.getAuthenticatedDoctor().getId();
-        List<Record> records = recordRepository.findByDoctorId(doctorId);
-        Record record = records.stream().filter(rec -> rec.getId().equals(id)).findFirst()
+        Record record = recordRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Record not found with id: " + id));
+
+        Long doctorId = authenticationUtils.getAuthenticatedDoctor().getId();
+        if (!record.getDoctorId().equals(doctorId)) {
+            throw new AccessDeniedException("You are not allowed to delete this record.");
+        }
 
         recordRepository.delete(record);
     }

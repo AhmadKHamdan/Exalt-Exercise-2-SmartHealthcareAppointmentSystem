@@ -56,8 +56,8 @@ public class AppointmentServiceImpl implements AppointmentService {
                 AppointmentStatus.BOOKED);
 
         LocalDateTime requestedEnd = request.appointmentTime().plusMinutes(30);
+        LocalTime requestedEndTime = requestedEnd.toLocalTime();
         LocalTime requestedTime = request.appointmentTime().toLocalTime();
-        LocalTime requestedEndTime = requestedTime.plusMinutes(30);
 
         if (requestedTime.isBefore(doctor.getAvailabilityFrom())
                 || requestedEndTime.isAfter(doctor.getAvailabilityTill())) {
@@ -65,10 +65,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
 
         for (var appointment : bookedAppointmentsForDoctor) {
-            if (appointment.getStatus() == AppointmentStatus.CANCELED) {
-                continue;
-            }
-
             LocalDateTime existingEnd = appointment.getAppointmentTime().plusMinutes(30);
 
             if (request.appointmentTime().isBefore(existingEnd)
@@ -85,7 +81,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    @LogAction("Appointment cancelled")
+    @LogAction("Appointment canceled")
     public void cancelAppointmentById(Long id) {
         Patient patient = authenticationUtils.getAuthenticatedPatient();
 

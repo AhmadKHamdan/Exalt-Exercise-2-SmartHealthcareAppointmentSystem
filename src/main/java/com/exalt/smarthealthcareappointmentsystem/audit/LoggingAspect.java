@@ -20,10 +20,8 @@ public class LoggingAspect {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        System.out.println("Action: " + logAction.value() + " | Method: " + joinPoint.getSignature().getName()
-                + " | By: " + auth.getName() + " | Role: " + auth.getAuthorities().stream().toList().get(0));
-
-        logger.info("Action: " + logAction.value() + " | Method: " + joinPoint.getSignature().getName()
-                + " | By: " + auth.getName() + " | Role: " + auth.getAuthorities().stream().toList().get(0));
+        logger.info("Action: {} | Method: {} | By: {} | Role: {}", logAction.value(),
+                joinPoint.getSignature().getName(), auth.getName(),
+                auth.getAuthorities().stream().findFirst().orElse(null));
     }
 }

@@ -55,11 +55,7 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ErrorObject> buildErrorResponse(HttpStatus status, String message) {
-        ErrorObject errorObject = new ErrorObject();
-        errorObject.setStatusCode(status.value());
-        errorObject.setMessage(message);
-        errorObject.setTimestamp(LocalDateTime.now());
-
+        ErrorObject errorObject = new ErrorObject(status.value(), message, LocalDateTime.now());
         return new ResponseEntity<>(errorObject, status);
     }
 }
